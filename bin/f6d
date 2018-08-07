@@ -1,0 +1,18 @@
+#!/usr/bin/env node --harmony
+'use strict'
+
+const program = require('commander')
+
+const init = require('../actions/init.js');
+
+
+program
+  .version(require('../package.json').version)
+
+program
+  .command('init [repository] [project]')
+  .description('Create the project from the template')
+  .option("-s, --setup_mode [mode]", "Which setup mode to use")
+  .action(init);
+
+program.parse(process.argv);
