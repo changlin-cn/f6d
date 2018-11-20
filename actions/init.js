@@ -6,10 +6,12 @@ const path = require('path');
 const reqositoryMap = require("../const/index.js").repository;
 
 module.exports = async function (repository, project = "./", options) {
+    const { repositoryVersion } = options;
+    console.log(`repositoryVersion:${repositoryVersion}`)
     let rep = repository;
     if (rep === undefined) {
         rep = (await inquirer.prompt([
-            {type: "input", name: "rep", message: "Repository address:"}
+            { type: "input", name: "rep", message: "Repository address:" }
         ])).rep;
     }
 
@@ -18,8 +20,9 @@ module.exports = async function (repository, project = "./", options) {
 
     spinner.start();
 
-    download(_repository, project, function (err) {
+    download(`${_repository}`, path.resolve(process.cwd(),project),function (err) {
         if (err) {
+            console.log(err);
             spinner.fail(`Download ${_repository} failed`);
             return
         }
@@ -30,9 +33,9 @@ module.exports = async function (repository, project = "./", options) {
         const arr = path.resolve(process.cwd(), project).split(path.sep);
         const dirname = arr[arr.length - 1];
         try {
-            require(templateInit)({inquirer, project: dirname})
+            require(templateInit)({ inquirer, project: dirname })
         } catch (e) {
-
+            console.log(e)
         }
 
     });
