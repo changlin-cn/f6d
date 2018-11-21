@@ -2,6 +2,7 @@ const download = require("download-git-repo");
 const ora = require("ora");
 const inquirer = require("inquirer");
 const path = require('path');
+const clone = require('./clone');
 
 const reqositoryMap = require("../const/index.js").repository;
 
@@ -19,12 +20,10 @@ module.exports = async function (repository, project = "./", options) {
     const spinner = ora(`"${_repository}" downloading...`);
 
     spinner.start();
-
-    download(`${_repository}`, path.resolve(process.cwd(),project),function (err) {
-        if (err) {
-            console.log(err);
+    clone({repo:_repository,targetPath:path.resolve(process.cwd(),project)},function(error){
+        if(error){
+            console.log(error);
             spinner.fail(`Download ${_repository} failed`);
-            return
         }
         spinner.succeed(`Download ${_repository} succeed`);
 
@@ -37,6 +36,7 @@ module.exports = async function (repository, project = "./", options) {
         } catch (e) {
             console.log(e)
         }
-
-    });
+       
+    })
+    
 };
