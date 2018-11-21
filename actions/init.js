@@ -1,4 +1,3 @@
-const download = require("download-git-repo");
 const ora = require("ora");
 const inquirer = require("inquirer");
 const path = require('path');
