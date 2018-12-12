@@ -4,15 +4,21 @@
 const program = require('commander')
 
 const init = require('../actions/init.js');
-
+const {cloneCommand} = require('../actions/clone.js')
 
 program
   .version(require('../package.json').version)
-
+// init
 program
   .command('init [repository] [project]')
   .description('Create the project from the template')
   .option("-v, --repositoryVersion [version]", "Which version of repository setup to use")
   .action(init);
+// clone
+program
+  .command('clone [repository] [project]')
+  .description('Clone files from git repository')
+  .action(cloneCommand);
+  
 
 program.parse(process.argv);

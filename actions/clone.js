@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const tempFolder = './.temp__folder';
 const copy = require('copy');
+const ora = require("ora");
 const {stat} = fs;
 const callback = (e) => { console.log(e) }
 
@@ -21,9 +22,7 @@ const deleteFolder = function (path) {
         fs.rmdirSync(path);
     }
 };
-
-
-module.exports = function ({ repo, targetPath }, cb = callback) {
+function clone({ repo, targetPath }, cb = callback) {
     const tempFolderPath = path.resolve(targetPath, tempFolder);
     const process = spawn('git', ['clone', repo, tempFolderPath]);
     process.on('close', function (status) {
@@ -38,3 +37,18 @@ module.exports = function ({ repo, targetPath }, cb = callback) {
         }
     });
 }
+
+function cloneCommand(repository, project = "./"){
+    const spinner = ora(`Downloading...`);
+    spinner.start();
+    clone({repo:repository,targetPath:path.resolve(process.cwd(),project)},function(error){
+        if(error){
+            console.log(error);
+            spinner.fail(`Download failed`);
+            process.exit(1)
+            return 
+        }
+        spinner.succeed(`Download succeed`);    
+    })
+}
+module.exports = {clone,cloneCommand}
