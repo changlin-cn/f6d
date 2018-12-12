@@ -4,24 +4,10 @@ const fs = require('fs');
 const tempFolder = './.temp__folder';
 const copy = require('copy');
 const ora = require("ora");
+const {deleteFolder}  = require('../helper/deleteFolder.js');
 const {stat} = fs;
 const callback = (e) => { console.log(e) }
 
-const deleteFolder = function (path) {
-    let files = [];
-    if (fs.existsSync(path)) {
-        files = fs.readdirSync(path);
-        files.forEach(function (file, index) {
-            const curPath = path + "/" + file;
-            if (fs.statSync(curPath).isDirectory()) { // recurse
-                deleteFolder(curPath);
-            } else { // delete file
-                fs.unlinkSync(curPath);
-            }
-        });
-        fs.rmdirSync(path);
-    }
-};
 function clone({ repo, targetPath }, cb = callback) {
     const tempFolderPath = path.resolve(targetPath, tempFolder);
     const process = spawn('git', ['clone', repo, tempFolderPath]);
@@ -48,7 +34,8 @@ function cloneCommand(repository, project = "./"){
             process.exit(1)
             return 
         }
-        spinner.succeed(`Download succeed`);    
+        spinner.succeed(`Download succeed`);
+        process.exit();    
     })
 }
 module.exports = {clone,cloneCommand}
