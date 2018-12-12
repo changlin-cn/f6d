@@ -1,3 +1,3 @@
 module.exports.repository={
-    npm:'github:changlin-cn/template-npm'
+    npmpkg:'https://github.com/changlin-cn/template-npm.git'
 }

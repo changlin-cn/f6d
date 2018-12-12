@@ -12,7 +12,7 @@ program
 program
   .command('init [repository] [project]')
   .description('Create the project from the template')
-  .option("-s, --setup_mode [mode]", "Which setup mode to use")
+  .option("-v, --repositoryVersion [version]", "Which version of repository setup to use")
   .action(init);
 
 program.parse(process.argv);
