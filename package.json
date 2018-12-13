@@ -11,7 +11,7 @@
     "precommit": "lint-staged"
   },
   "lint-staged": {
-    "**/*.{js}": [
+    "**/*.js": [
       "eslint --fix",
       "git add"
     ]
@@ -60,7 +60,7 @@
     "eslint-plugin-node": "^7.0.1",
     "eslint-plugin-promise": "^3.8.0",
     "eslint-plugin-standard": "^3.1.0",
-    "husky": "^1.1.2",
+    "husky": "^1.2.0",
     "jest": "^23.6.0"
   }
 }

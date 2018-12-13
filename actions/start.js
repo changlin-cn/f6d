@@ -13,6 +13,7 @@ module.exports = function(options) {
       // webpack-dev-middleware options
     })
   );
-  // /eslint-disable-next-line
+
+  // eslint-disable-next-line
   app.listen(port, () => console.log(`App listening on port ${port}!`));
 };
