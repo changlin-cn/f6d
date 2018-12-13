@@ -21,7 +21,7 @@ module.exports = async function (repository, project = "./", options) {
     spinner.start();
     clone({repo:_repository,targetPath:path.resolve(process.cwd(),project)},function(error){
         if(error){
-            console.log(error);
+            // console.log(error);
             spinner.fail(`Download ${_repository} failed`);
             process.exit(1);
             return

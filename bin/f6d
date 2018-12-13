@@ -5,6 +5,9 @@ const program = require('commander')
 
 const init = require('../actions/init.js');
 const {cloneCommand} = require('../actions/clone.js')
+const start = require('../actions/start.js');
+const build = require('../actions/build.js');
+
 
 program
   .version(require('../package.json').version)
@@ -19,6 +22,18 @@ program
   .command('clone [repository] [project]')
   .description('Clone files from git repository')
   .action(cloneCommand);
+
+// start
+program
+  .command('start')
+  .description('Start a server with webpack-dev-middleware')
+  .option("-p, --port [port]", "Which port will the server listen?")
+  .action(start);  
   
+// build
+program
+  .command('build')
+  .description('Webpack ')
+  .action(build);    
 
 program.parse(process.argv);
