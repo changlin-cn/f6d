@@ -1,13 +1,13 @@
 const ora = require("ora");
 const inquirer = require("inquirer");
 const path = require('path');
-const clone = require('./clone');
+const clone = require('./clone').clone;
 
 const reqositoryMap = require("../const/index.js").repository;
 
 module.exports = async function (repository, project = "./", options) {
     const { repositoryVersion } = options;
-    console.log(`repositoryVersion:${repositoryVersion}`)
+    // console.log(`repositoryVersion:${repositoryVersion}`)
     let rep = repository;
     if (rep === undefined) {
         rep = (await inquirer.prompt([
@@ -21,8 +21,10 @@ module.exports = async function (repository, project = "./", options) {
     spinner.start();
     clone({repo:_repository,targetPath:path.resolve(process.cwd(),project)},function(error){
         if(error){
-            console.log(error);
+            // console.log(error);
             spinner.fail(`Download ${_repository} failed`);
+            process.exit(1);
+            return
         }
         spinner.succeed(`Download ${_repository} succeed`);
 
