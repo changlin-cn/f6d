@@ -11,7 +11,8 @@ module.exports = merge(common, {
   mode: "production",
   output: {
     filename: "static/[name].[chunkhash].js",
-    path: path.resolve(process.cwd(), "dist")
+    path: path.resolve(process.cwd(), "dist"),
+    chunkFilename: 'static/[name].[chunkhash].js'
   },
   plugins: [
     new CleanWebpackPlugin(["dist"], { root: process.cwd() }),
