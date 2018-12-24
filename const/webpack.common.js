@@ -21,7 +21,12 @@ function createStyleLoader(type = "less") {
           ]
         }
       },
-      isLess ? require.resolve("less-loader?javascriptEnabled=true") : require.resolve("sass-loader") // compiles Sass to CSS, using Node Sass by default
+      isLess
+        ? {
+            loader: require.resolve("less-loader"),
+            options: { javascriptEnabled: true }
+          }
+        : require.resolve("sass-loader") // compiles Sass to CSS, using Node Sass by default
     ]
   };
 }
