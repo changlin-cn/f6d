@@ -7,6 +7,7 @@ module.exports = {
     globals:{
 
     },
+    plugins:["prettier"],
     parser:'babel-eslint',
     "extends": ["eslint:recommended"],
     "parserOptions": {
@@ -14,6 +15,7 @@ module.exports = {
         "sourceType": "module"
     },
     "rules": {
-       "no-console":0
+       "no-console":0,
+       "prettier/prettier": "error"
     }
 }
