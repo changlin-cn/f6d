@@ -8,7 +8,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "format":"eslint --fix   actions/*.js bin/* const/*.js helper/*.js"
   },
   "lint-staged": {
     "**/*.js": [

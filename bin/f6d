@@ -1,39 +1,40 @@
 #!/usr/bin/env node --harmony
-'use strict'
+'use strict';
 
-const program = require('commander')
+const program = require('commander');
 
 const init = require('../actions/init.js');
-const {cloneCommand} = require('../actions/clone.js')
+const { cloneCommand } = require('../actions/clone.js');
 const start = require('../actions/start.js');
 const build = require('../actions/build.js');
 
-
-program
-  .version(require('../package.json').version)
+program.version(require('../package.json').version);
 // init
 program
-  .command('init [repository] [project]')
-  .description('Create the project from the template')
-  .option("-v, --repositoryVersion [version]", "Which version of repository setup to use")
-  .action(init);
+    .command('init [repository] [project]')
+    .description('Create the project from the template')
+    .option(
+        '-v, --repositoryVersion [version]',
+        'Which version of repository setup to use',
+    )
+    .action(init);
 // clone
 program
-  .command('clone [repository] [project]')
-  .description('Clone files from git repository')
-  .action(cloneCommand);
+    .command('clone [repository] [project]')
+    .description('Clone files from git repository')
+    .action(cloneCommand);
 
 // start
 program
-  .command('start')
-  .description('Start a server with webpack-dev-middleware')
-  .option("-p, --port [port]", "Which port will the server listen?")
-  .action(start);  
-  
+    .command('start')
+    .description('Start a server with webpack-dev-middleware')
+    .option('-p, --port [port]', 'Which port will the server listen?')
+    .action(start);
+
 // build
 program
-  .command('build')
-  .description('Webpack ')
-  .action(build);    
+    .command('build')
+    .description('Webpack ')
+    .action(build);
 
 program.parse(process.argv);

@@ -8,5 +8,6 @@
   "semi": true,
   "proseWrap": "preserve",
   "useTabs": false,
-  "arrowParens": "always"
+  "arrowParens": "always",
+  "tabWidth":4
 }
