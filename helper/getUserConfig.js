@@ -9,6 +9,7 @@ module.exports = function() {
         port: 3000,
         webpackConfig: {
             jsLoaderIncludePkg: [],
+            resolve: {},
         },
     };
     if (isConfigExists) {

@@ -39,7 +39,7 @@ function createStyleLoader(type = 'less') {
 
 module.exports = (env) => {
     const { webpackConfig = {} } = getUserConfig();
-    const { jsLoaderIncludePkg = [] } = webpackConfig;
+    const { jsLoaderIncludePkg = [], resolve = {} } = webpackConfig;
 
     const commonConfig = {
         entry: './src/index.js',
@@ -127,6 +127,7 @@ module.exports = (env) => {
         return merge(commonConfig, {
             mode: 'development',
             devtool: 'inline-source-map',
+            resolve,
             optimization: {
                 minimize: false,
                 namedModules: true,
@@ -145,6 +146,7 @@ module.exports = (env) => {
     if (env === 'prd') {
         return merge(commonConfig, {
             mode: 'production',
+            resolve,
             output: {
                 filename: 'static/[name].[chunkhash].js',
                 path: path.resolve(process.cwd(), 'dist'),
