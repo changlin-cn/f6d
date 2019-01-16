@@ -1,5 +1,5 @@
 const webpack = require('webpack');
-const prdConfig = require('../const/webpack.prd.js');
+const prdConfig = require('../helper/getWebpackConfig')('prd');
 
 module.exports = function() {
     const compiler = webpack(prdConfig);
