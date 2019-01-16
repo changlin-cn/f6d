@@ -10,6 +10,8 @@ module.exports = function() {
         webpackConfig: {
             jsLoaderIncludePkg: [],
             resolve: {},
+            useAntd: false,
+            bundleAnalyzer: false,
         },
     };
     if (isConfigExists) {

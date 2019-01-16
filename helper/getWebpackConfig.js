@@ -4,8 +4,9 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const merge = require('webpack-merge');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const webpack = require('webpack');
-const visualizer = require('webpack-visualizer-plugin');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+    .BundleAnalyzerPlugin;
 const getUserConfig = require('./getUserConfig');
 
 // const webpack = require("webpack");
@@ -39,7 +40,12 @@ function createStyleLoader(type = 'less') {
 
 module.exports = (env) => {
     const { webpackConfig = {} } = getUserConfig();
-    const { jsLoaderIncludePkg = [], resolve = {} } = webpackConfig;
+    const {
+        jsLoaderIncludePkg = [],
+        resolve = {},
+        useAntd,
+        bundleAnalyzer,
+    } = webpackConfig;
 
     const commonConfig = {
         entry: './src/index.js',
@@ -56,7 +62,7 @@ module.exports = (env) => {
                 {
                     test: /\.jsx?$/,
                     exclude: new RegExp(
-                        `node_modules/${
+                        `node_modules(\\\\|/)${
                             jsLoaderIncludePkg.length
                                 ? `(?!${jsLoaderIncludePkg.join('|')})`
                                 : ''
@@ -69,18 +75,30 @@ module.exports = (env) => {
                                 require.resolve('@babel/preset-env'),
                                 require.resolve('@babel/preset-react'),
                             ],
-                            plugins: [
-                                require.resolve(
-                                    '@babel/plugin-transform-runtime',
-                                ),
-                                require.resolve(
-                                    '@babel/plugin-syntax-dynamic-import',
-                                ),
-                                require.resolve(
-                                    '@babel/plugin-proposal-class-properties',
-                                ),
-                                require.resolve('babel-plugin-lodash'),
-                            ],
+                            plugins: (() => {
+                                const plugins = [
+                                    require.resolve(
+                                        '@babel/plugin-transform-runtime',
+                                    ),
+                                    require.resolve(
+                                        '@babel/plugin-syntax-dynamic-import',
+                                    ),
+                                    require.resolve(
+                                        '@babel/plugin-proposal-class-properties',
+                                    ),
+                                    require.resolve('babel-plugin-lodash'),
+                                ];
+                                if (useAntd) {
+                                    plugins.push([
+                                        require.resolve('babel-plugin-import'),
+                                        {
+                                            libraryName: 'antd',
+                                            style: false, // or 'css'
+                                        },
+                                    ]);
+                                }
+                                return plugins;
+                            })(),
                         },
                     },
                 },
@@ -114,6 +132,10 @@ module.exports = (env) => {
                     },
                 },
             },
+            // splitChunks: {
+            //     // include all types of chunks
+            //     chunks: 'all',
+            // },
         },
         plugins: [
             new HtmlWebpackPlugin({
@@ -152,23 +174,30 @@ module.exports = (env) => {
                 path: path.resolve(process.cwd(), 'dist'),
                 chunkFilename: 'static/[name].[chunkhash].js',
             },
-            plugins: [
-                new CleanWebpackPlugin(['dist'], { root: process.cwd() }),
-                new webpack.HashedModuleIdsPlugin({
-                    hashFunction: 'sha256',
-                    hashDigest: 'hex',
-                    hashDigestLength: 20,
-                }),
-                new visualizer({
-                    filename: 'visualizer.html',
-                }),
-                new MiniCssExtractPlugin({
-                    // Options similar to the same options in webpackOptions.output
-                    // both options are optional
-                    filename: 'static/[name].[chunkhash].css',
-                    chunkFilename: 'static/[id].[chunkhash].css',
-                }),
-            ],
+            plugins: (() => {
+                const plugins = [
+                    new CleanWebpackPlugin(['dist'], { root: process.cwd() }),
+                    new webpack.HashedModuleIdsPlugin({
+                        hashFunction: 'sha256',
+                        hashDigest: 'hex',
+                        hashDigestLength: 20,
+                    }),
+                    new MiniCssExtractPlugin({
+                        // Options similar to the same options in webpackOptions.output
+                        // both options are optional
+                        filename: 'static/[name].[chunkhash].css',
+                        chunkFilename: 'static/[id].[chunkhash].css',
+                    }),
+                ];
+                if (bundleAnalyzer) {
+                    plugins.push(
+                        new BundleAnalyzerPlugin({
+                            analyzerMode: 'static',
+                        }),
+                    );
+                }
+                return plugins;
+            })(),
             node: {
                 process: true,
             },
