@@ -45,6 +45,7 @@ module.exports = (env) => {
         resolve = {},
         useAntd,
         bundleAnalyzer,
+        publicPath,
     } = webpackConfig;
 
     const commonConfig = {
@@ -53,9 +54,10 @@ module.exports = (env) => {
             modules: [path.resolve(process.cwd(), 'src'), 'node_modules'],
         },
         output: {
-            filename: '[name].js',
+            filename: 'static/[name].js',
             path: path.resolve(process.cwd(), 'dist'),
             chunkFilename: 'static/[name].js',
+            publicPath: publicPath || '/',
         },
         module: {
             rules: [
@@ -158,8 +160,8 @@ module.exports = (env) => {
                 new MiniCssExtractPlugin({
                     // Options similar to the same options in webpackOptions.output
                     // both options are optional
-                    filename: '[name].css',
-                    chunkFilename: '[id].css',
+                    filename: 'static/[name].css',
+                    chunkFilename: 'static/[id].css',
                 }),
             ],
         });

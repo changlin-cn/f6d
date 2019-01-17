@@ -10,9 +10,12 @@ module.exports = function(commandConfig) {
     //   console.log(devConfig);
     const devConfig = getWebpackConfig('dev');
     const compiler = webpack(devConfig);
+    const baseURL = devConfig.output.publicPath || '/';
+    // console.log('compiler.options.publicPath:'+compiler.options.publicPath) undefined
     const app = express();
     const wd_middleware = webpackDevMiddleware(compiler, {
         // webpack-dev-middleware options
+        publicPath: baseURL,
     });
     app.use(function(req, res, next) {
         console.log(`req.url:${req.url}`);
@@ -21,12 +24,8 @@ module.exports = function(commandConfig) {
 
     app.use(wd_middleware);
     // 404
-    app.use(compiler.options.publicPath || '/', function(req, res, next) {
-        wd_middleware(
-            { ...req, url: compiler.options.publicPath || '/' },
-            res,
-            next,
-        );
+    app.use(baseURL, function(req, res, next) {
+        wd_middleware({ ...req, url: baseURL }, res, next);
     });
 
     // eslint-disable-next-line

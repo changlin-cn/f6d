@@ -12,6 +12,7 @@ module.exports = function() {
             resolve: {},
             useAntd: false,
             bundleAnalyzer: false,
+            publicPath: '/',
         },
     };
     if (isConfigExists) {
