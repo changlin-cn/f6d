@@ -17,6 +17,12 @@ module.exports = function(commandConfig) {
         // webpack-dev-middleware options
         publicPath: baseURL,
     });
+    app.use(
+        require('webpack-hot-middleware')(compiler, {
+            path: '/__webpack_hmr',
+            heartbeat: 2000,
+        }),
+    );
     app.use(function(req, res, next) {
         console.log(`req.url:${req.url}`);
         next();

@@ -47,6 +47,7 @@ module.exports = (env) => {
         bundleAnalyzer,
         publicPath,
     } = webpackConfig;
+    const isDev = env === 'dev';
 
     const commonConfig = {
         entry: './src/index.js',
@@ -147,11 +148,15 @@ module.exports = (env) => {
         ],
     };
 
-    if (env === 'dev') {
+    if (isDev) {
         return merge(commonConfig, {
             mode: 'development',
             devtool: 'inline-source-map',
             resolve,
+            entry: [
+                require.resolve('webpack-hot-middleware/client.js'),
+                './src/index',
+            ],
             optimization: {
                 minimize: false,
                 namedModules: true,
@@ -162,6 +167,10 @@ module.exports = (env) => {
                     // both options are optional
                     filename: 'static/[name].css',
                     chunkFilename: 'static/[id].css',
+                }),
+                new webpack.HotModuleReplacementPlugin(),
+                new webpack.DefinePlugin({
+                    __resourceQuery: JSON.stringify(`?reload=true`),
                 }),
             ],
         });
