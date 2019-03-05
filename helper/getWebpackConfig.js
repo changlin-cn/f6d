@@ -48,11 +48,15 @@ module.exports = (env) => {
         publicPath,
     } = webpackConfig;
     const isDev = env === 'dev';
-
+    // console.log(__dirname)
     const commonConfig = {
         entry: './src/index.js',
         resolve: {
-            modules: [path.resolve(process.cwd(), 'src'), 'node_modules'],
+            modules: [
+                path.resolve(process.cwd(), 'src'),
+                'node_modules',
+                path.resolve(__dirname, '../node_modules'),
+            ],
         },
         output: {
             filename: 'static/[name].js',
@@ -153,10 +157,7 @@ module.exports = (env) => {
             mode: 'development',
             devtool: 'inline-source-map',
             resolve,
-            entry: [
-                require.resolve('webpack-hot-middleware/client.js'),
-                './src/index',
-            ],
+            entry: ['webpack-hot-middleware/client.js', './src/index'],
             optimization: {
                 minimize: false,
                 namedModules: true,
