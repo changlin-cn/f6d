@@ -110,6 +110,10 @@ module.exports = (env) => {
                     },
                 },
                 {
+                    test: /\.svg$/,
+                    use: ['@svgr/webpack'],
+                },
+                {
                     test: /\.(jpg|png|jpeg|gif)$/i,
                     use: [
                         {
