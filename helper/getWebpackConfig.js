@@ -111,7 +111,7 @@ module.exports = (env) => {
                 },
                 {
                     test: /\.svg$/,
-                    use: ['@svgr/webpack'],
+                    use: [require.resolve('@svgr/webpack')],
                 },
                 {
                     test: /\.(jpg|png|jpeg|gif)$/i,
