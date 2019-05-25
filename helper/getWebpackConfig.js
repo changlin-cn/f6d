@@ -100,7 +100,7 @@ module.exports = (env) => {
                                         require.resolve('babel-plugin-import'),
                                         {
                                             libraryName: 'antd',
-                                            style: true, // or 'css'
+                                            // style: true, // or 'css'
                                         },
                                     ]);
                                 }
