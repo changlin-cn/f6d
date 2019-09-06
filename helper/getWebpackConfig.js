@@ -152,7 +152,10 @@ module.exports = (env) => {
             new HtmlWebpackPlugin({
                 template: path.resolve(process.cwd(), 'src/index.html'),
             }),
-            new LodashModuleReplacementPlugin(),
+            new LodashModuleReplacementPlugin({
+                memoizing: true,
+                paths: true,
+            }),
         ],
     };
 
