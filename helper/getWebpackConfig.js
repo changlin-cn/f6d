@@ -100,6 +100,9 @@ module.exports = (env) => {
                                         require.resolve('babel-plugin-import'),
                                         {
                                             libraryName: 'antd',
+                                            ...(typeof useAntd === 'object'
+                                                ? useAntd
+                                                : {}),
                                             // style: true, // or 'css'
                                         },
                                     ]);
@@ -162,7 +165,7 @@ module.exports = (env) => {
     if (isDev) {
         return merge(commonConfig, {
             mode: 'development',
-            devtool: 'inline-source-map',
+            // devtool: 'inline-source-map',
             resolve,
             entry: ['webpack-hot-middleware/client.js', './src/index'],
             optimization: {
