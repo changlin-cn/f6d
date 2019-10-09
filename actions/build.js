@@ -4,11 +4,6 @@ const prdConfig = require('../helper/getWebpackConfig')('prd');
 module.exports = function() {
     const compiler = webpack(prdConfig);
     compiler.run((err, stats) => {
-        if (err || stats.hasErrors()) {
-            // Handle errors here
-            // eslint-disable-next-line
-            console.log(err);
-        }
         // eslint-disable-next-line
         console.log(
             stats.toString({
@@ -16,6 +11,15 @@ module.exports = function() {
                 colors: true, // Shows colors in the console
             }),
         );
+
+        if (err || stats.hasErrors()) {
+            // Handle errors here
+            // eslint-disable-next-line
+            console.log(err);
+
+            process.exitCode = 1;
+        }
+
         // Done processing
     });
 };
