@@ -162,8 +162,9 @@ module.exports = (env) => {
         ],
     };
 
+    let envConfig;
     if (isDev) {
-        return merge(commonConfig, {
+        envConfig = merge(commonConfig, {
             mode: 'development',
             // devtool: 'inline-source-map',
             resolve,
@@ -188,7 +189,7 @@ module.exports = (env) => {
     }
 
     if (env === 'prd') {
-        return merge(commonConfig, {
+        envConfig = merge(commonConfig, {
             mode: 'production',
             resolve,
             output: {
@@ -225,4 +226,6 @@ module.exports = (env) => {
             },
         });
     }
+
+    return merge(envConfig, webpackConfig.otherConfig || {});
 };
