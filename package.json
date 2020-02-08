@@ -1,6 +1,6 @@
 {
   "name": "f6d",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "快速开始前端项目 / Start the front-end project quickly.",
   "main": "index.js",
   "bin": {

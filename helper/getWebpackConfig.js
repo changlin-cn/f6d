@@ -10,14 +10,25 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
 const getUserConfig = require('./getUserConfig');
 
 // const webpack = require("webpack");
-function createStyleLoader(type = 'less') {
+function createStyleLoader(options) {
+    const { type = 'less', dev, cssModules } = options;
     const isLess = type === 'less';
     return {
         test: isLess ? /\.(le|c)ss$/ : /\.s(c|a)ss$/,
         use: [
-            MiniCssExtractPlugin.loader,
-            // require.resolve("style-loader"),
-            require.resolve('css-loader'), // translates CSS into CommonJS
+            {
+                loader: MiniCssExtractPlugin.loader,
+                options: {
+                    hmr: dev, // 仅dev环境启用HMR功能
+                },
+            },
+            {
+                loader: require.resolve('css-loader'), // translates CSS into CommonJS
+                options: {
+                    modules: cssModules,
+                },
+            },
+
             {
                 loader: require.resolve('postcss-loader'),
                 options: {
@@ -46,6 +57,8 @@ module.exports = (env) => {
         useAntd,
         bundleAnalyzer,
         publicPath,
+        styleLoader = true,
+        cssModules = false,
     } = webpackConfig;
     const isDev = env === 'dev';
     // console.log(__dirname)
@@ -129,8 +142,20 @@ module.exports = (env) => {
                         },
                     ],
                 },
-                createStyleLoader(),
-                createStyleLoader('sass'),
+                ...(styleLoader
+                    ? [
+                          createStyleLoader({
+                              type: 'less',
+                              dev: isDev,
+                              cssModules,
+                          }),
+                          createStyleLoader({
+                              type: 'sass',
+                              dev: isDev,
+                              cssModules,
+                          }),
+                      ]
+                    : []),
             ],
         },
         optimization: {
