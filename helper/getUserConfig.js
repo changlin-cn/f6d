@@ -13,6 +13,9 @@ module.exports = function() {
             useAntd: false,
             bundleAnalyzer: false,
             publicPath: '/',
+            optimization: null,
+            splitChunksQuickly: [],
+            svgLoader: null,
         },
     };
     if (isConfigExists) {

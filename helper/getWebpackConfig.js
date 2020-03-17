@@ -59,6 +59,9 @@ module.exports = (env) => {
         publicPath,
         styleLoader = true,
         cssModules = false,
+        optimization,
+        splitChunksQuickly,
+        svgLoader,
     } = webpackConfig;
     const isDev = env === 'dev';
     // console.log(__dirname)
@@ -125,10 +128,14 @@ module.exports = (env) => {
                         },
                     },
                 },
-                {
-                    test: /\.svg$/,
-                    use: [require.resolve('@svgr/webpack')],
-                },
+                (function() {
+                    return (
+                        svgLoader || {
+                            test: /\.svg$/,
+                            use: [require.resolve('@svgr/webpack')],
+                        }
+                    );
+                })(),
                 {
                     test: /\.(jpg|png|jpeg|gif)$/i,
                     use: [
@@ -158,24 +165,60 @@ module.exports = (env) => {
                     : []),
             ],
         },
-        optimization: {
-            runtimeChunk: {
-                name: 'runtime',
-            },
-            splitChunks: {
-                cacheGroups: {
-                    vendor: {
-                        test: /[\\/]node_modules[\\/]/,
-                        name: 'vendors',
-                        chunks: 'all',
-                    },
-                },
-            },
-            // splitChunks: {
-            //     // include all types of chunks
-            //     chunks: 'all',
-            // },
-        },
+        optimization: optimization
+            ? optimization
+            : {
+                  runtimeChunk: {
+                      name: 'runtime',
+                  },
+                  splitChunks: (function() {
+                      const cfg = {
+                          maxInitialRequests: 30,
+                          cacheGroups: {
+                              vendor: {
+                                  test: /[\\/]node_modules[\\/]/,
+                                  priority: 0,
+                                  //   test: new RegExp(
+                                  //       `[\\\\/]node_modules[\\\\/]${splitChunksQuickly
+                                  //           .map((n) => `(?!${n})`)
+                                  //           .join('')}`,
+                                  //   ),
+                                  name: 'vendors',
+                                  chunks: 'all',
+                              },
+                          },
+                      };
+
+                      splitChunksQuickly.forEach((n) => {
+                          let test;
+                          let name;
+
+                          if (typeof n === 'string') {
+                              name = n;
+                              test = new RegExp(
+                                  `[\\\\/]node_modules[\\\\/]${n}`,
+                              );
+                          } else if (n instanceof Object) {
+                              name = n.name;
+                              test = n.test;
+                          }
+
+                          cfg.cacheGroups[n] = {
+                              test,
+                              name,
+                              priority: 1,
+                              chunks: 'all',
+                          };
+                      });
+
+                      return cfg;
+                  })(),
+
+                  // splitChunks: {
+                  //     // include all types of chunks
+                  //     chunks: 'all',
+                  // },
+              },
         plugins: [
             new HtmlWebpackPlugin({
                 template: path.resolve(process.cwd(), 'src/index.html'),
@@ -206,9 +249,9 @@ module.exports = (env) => {
                     chunkFilename: 'static/[id].css',
                 }),
                 new webpack.HotModuleReplacementPlugin(),
-                new webpack.DefinePlugin({
-                    __resourceQuery: JSON.stringify(`?reload=true`),
-                }),
+                // new webpack.DefinePlugin({
+                //     __resourceQuery: JSON.stringify(`?reload=true`),
+                // }),
             ],
         });
     }
