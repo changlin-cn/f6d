@@ -1,6 +1,6 @@
 {
   "name": "f6d",
-  "version": "0.3.4",
+  "version": "1.0.0",
   "description": "快速开始前端项目 / Start the front-end project quickly.",
   "main": "index.js",
   "bin": {
@@ -58,7 +58,6 @@
     "node-sass": "^4.11.0",
     "ora": "^3.0.0",
     "postcss-loader": "^3.0.0",
-    "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
     "url-loader": "^1.1.2",
     "webpack": "^4.27.1",

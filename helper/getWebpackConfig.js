@@ -11,8 +11,8 @@ const getUserConfig = require('./getUserConfig');
 
 // const webpack = require("webpack");
 function createStyleLoader(options) {
-    const { type = 'less', dev, cssModules } = options;
-    const isLess = type === 'less';
+    const {  dev, cssModules } = options;
+  
     return {
         test: isLess ? /\.(le|c)ss$/ : /\.s(c|a)ss$/,
         use: [
@@ -39,12 +39,11 @@ function createStyleLoader(options) {
                     ],
                 },
             },
-            isLess
-                ? {
+            {
                       loader: require.resolve('less-loader'),
                       options: { javascriptEnabled: true },
                   }
-                : require.resolve('sass-loader'), // compiles Sass to CSS, using Node Sass by default
+               
         ],
     };
 }
@@ -152,15 +151,10 @@ module.exports = (env) => {
                 ...(styleLoader
                     ? [
                           createStyleLoader({
-                              type: 'less',
                               dev: isDev,
                               cssModules,
                           }),
-                          createStyleLoader({
-                              type: 'sass',
-                              dev: isDev,
-                              cssModules,
-                          }),
+                         
                       ]
                     : []),
             ],
