@@ -14,7 +14,7 @@ function createStyleLoader(options) {
     const {  dev, cssModules } = options;
   
     return {
-        test: isLess ? /\.(le|c)ss$/ : /\.s(c|a)ss$/,
+        test: /\.(le|c)ss$/ ,
         use: [
             {
                 loader: MiniCssExtractPlugin.loader,
